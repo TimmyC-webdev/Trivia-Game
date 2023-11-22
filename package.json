@@ -2,7 +2,7 @@
   "name": "trivia",
   "version": "1.0.0",
   "description": "Trivia Game",
-  "default": "index.html",
+  "main": "index.html",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --dist-dir ./dist"
