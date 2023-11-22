@@ -16,6 +16,7 @@ body {
 .app {
   width: 80vw;
   max-width: 80vw;
+  min-height: 100vh;
   margin: auto;
 }
 
@@ -31,13 +32,14 @@ h1 {
 
 @media only screen and (width <= 768px) {
   h1 {
-    font-size: 2rem;
+    font-size: 3.5rem;
   }
 }
 
 .settings {
   flex-direction: wrap;
   gap: 3rem;
+  padding: 2rem;
   display: flex;
 }
 
@@ -79,6 +81,10 @@ select {
   font-size: 1.1rem;
 }
 
+select option {
+  padding-left: 2rem;
+}
+
 select:focus {
   border-color: #90ae22;
 }
@@ -95,7 +101,7 @@ select:focus {
   align-items: center;
   width: 10rem;
   height: 4rem;
-  margin: 3rem auto auto;
+  margin: 3rem auto;
   padding: 1.2rem 1.3rem;
   font-family: Poller One, serif;
   font-size: 1.3rem;
@@ -116,7 +122,7 @@ select:focus {
 }
 
 .start {
-  margin-top: 5rem;
+  margin-top: 7rem;
 }
 
 .timer {
@@ -249,10 +255,6 @@ select:focus {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-button.restart, button.submit, button.next, button.start {
-  margin-bottom: 3rem;
 }
 
 button.restart {
