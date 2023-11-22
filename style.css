@@ -175,13 +175,26 @@ select:focus {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 80%;
-  max-width: 80%;
+  width: 60vw;
+  max-width: 100%;
   justify-content: center;
   align-items: center;
   margin: auto;
   border-radius: 21px;
   gap: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+  .answers-container {
+    width: 90vw;
+    max-width: 100%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .answers-container .answer {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .answers-container .answer .text {
