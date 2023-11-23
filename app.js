@@ -26,6 +26,7 @@ async function triviaLaunch() {
   const number = questionsNumberEl.value;
   const category = categoryEl.value;
   const level = levelEl.value;
+  loading();
 
   const url = `https://opentdb.com/api.php?amount=${number}&category=${category}&difficulty=${level}&type=multiple`;
 
@@ -93,6 +94,17 @@ const launchTimer = (time) => {
       checkAnswer();
     }
   }, 1000);
+};
+
+const loading = () => {
+  startEl.innerHTML = ".";
+  const loadingInterval = setInterval(() => {
+    if (startEl.length === 10) {
+      startEl.innerHTML = ".";
+    } else {
+      startEl.innerHTML += ".";
+    }
+  }, 500);
 };
 
 const btnSubmit = document.querySelector(".submit");
