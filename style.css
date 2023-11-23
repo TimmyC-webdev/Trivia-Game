@@ -80,7 +80,7 @@ select {
   border-radius: 3px;
   border: 0.5px solid #71797e;
   outline: none;
-  background: transparent;
+  background-color: rgba(0, 0, 0, 0);
   color: #fff;
   font-size: 1.1rem;
 }
