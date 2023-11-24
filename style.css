@@ -125,6 +125,7 @@ select:focus {
 }
 .start {
   margin-top: 7rem;
+  margin-bottom: 2rem;
 }
 .timer {
   display: flex;
@@ -282,4 +283,13 @@ button.restart {
 }
 .hide {
   display: none;
+}
+
+.error {
+  color: #8b0000;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 5rem;
 }

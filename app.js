@@ -10,6 +10,7 @@ const settingsEl = document.querySelector(".settings");
 const gameDisplayEl = document.querySelector(".game-display");
 const progressBarEl = document.querySelector(".bar");
 const answersContainer = document.querySelector(".answers-container");
+const errorMessage = document.querySelector(".error");
 
 let questions = [];
 let timer,
@@ -23,25 +24,43 @@ const progress = (val) => {
 };
 
 async function triviaLaunch() {
-  const number = questionsNumberEl.value;
-  const category = categoryEl.value;
-  const level = levelEl.value;
-  loading();
+  try {
+    const number = questionsNumberEl.value;
+    const category = categoryEl.value;
+    const level = levelEl.value;
+    loading();
 
-  const url = `https://opentdb.com/api.php?amount=${number}&category=${category}&difficulty=${level}&type=multiple`;
+    const url = `https://opentdb.com/api.php?amount=${number}&category=${category}&difficulty=${level}&type=multiple`;
 
-  const response = await fetch(url);
-  const results = await response.json();
+    const response = await fetch(url);
 
-  questions = results.results;
+    if (!response.ok) {
+      throw new Error(`Error fetching questions. Status: ${response.status} `);
+    }
 
-  setTimeout(() => {
-    startDisplay.classList.add("hide");
-    gameDisplayEl.classList.remove("hide");
-    currQuestion = 1;
+    const results = await response.json();
 
-    displayQuestion(questions[0]);
-  }, 1000);
+    if (results.response_code !== 0) {
+      throw new Error(
+        `Error getting questions from the API. Response code: ${results.response_code}`
+      );
+    }
+
+    questions = results.results;
+
+    setTimeout(() => {
+      startDisplay.classList.add("hide");
+      gameDisplayEl.classList.remove("hide");
+      currQuestion = 1;
+
+      displayQuestion(questions[0]);
+    }, 1000);
+  } catch (error) {
+    console.error("An error occurred:", error.message);
+
+    errorMessage.classList.remove("hide");
+    errorMessage.innerHTML = `Something went wrong!!! ${error.message}`;
+  }
 }
 
 const displayQuestion = (question) => {
@@ -99,10 +118,13 @@ const launchTimer = (time) => {
 const loading = () => {
   startEl.innerHTML = ".";
   const loadingInterval = setInterval(() => {
-    if (startEl.length === 10) {
+    if (startEl.length === "") {
       startEl.innerHTML = ".";
     } else {
       startEl.innerHTML += ".";
+    }
+    if (startEl.innerHTML === "....") {
+      startEl.innerHTML = "";
     }
   }, 500);
 };
