@@ -1,16 +1,16 @@
 "use strict";
 
-const questionsNumberEl = document.querySelector("#questions-amount");
-const categoryEl = document.querySelector("#category");
-const levelEl = document.querySelector("#level");
-const timeEl = document.querySelector("#time");
-const startEl = document.querySelector(".start");
+const questionsNumberInput = document.querySelector("#questions-amount");
+const categoryInput = document.querySelector("#category");
+const levelInput = document.querySelector("#level");
+const timeInput = document.querySelector("#time");
+const startButton = document.querySelector(".start");
 const startDisplay = document.querySelector(".start-display");
-const settingsEl = document.querySelector(".settings");
-const gameDisplayEl = document.querySelector(".game-display");
-const progressBarEl = document.querySelector(".bar");
+const gameDisplay = document.querySelector(".game-display");
+const progressBar = document.querySelector(".bar");
 const answersContainer = document.querySelector(".answers-container");
 const errorMessage = document.querySelector(".error");
+const DISPLAY_DELAY = 1000;
 
 let questions = [];
 let timer,
@@ -20,14 +20,14 @@ let timer,
 
 const progress = (val) => {
   const percent = (val / time) * 100;
-  progressBarEl.style.width = `${percent}%`;
+  progressBar.style.width = `${percent}%`;
 };
 
 async function triviaLaunch() {
   try {
-    const number = questionsNumberEl.value;
-    const category = categoryEl.value;
-    const level = levelEl.value;
+    const number = questionsNumberInput.value;
+    const category = categoryInput.value;
+    const level = levelInput.value;
     loading();
 
     const url = `https://opentdb.com/api.php?amount=${number}&category=${category}&difficulty=${level}&type=multiple`;
@@ -50,11 +50,11 @@ async function triviaLaunch() {
 
     setTimeout(() => {
       startDisplay.classList.add("hide");
-      gameDisplayEl.classList.remove("hide");
+      gameDisplay.classList.remove("hide");
       currQuestion = 1;
 
       displayQuestion(questions[0]);
-    }, 1000);
+    }, DISPLAY_DELAY);
   } catch (error) {
     console.error("An error occurred:", error.message);
 
@@ -64,10 +64,20 @@ async function triviaLaunch() {
 }
 
 const displayQuestion = (question) => {
+  updateQuestionText(question);
+  displayAnswers(question);
+  time = timeInput.value;
+
+  launchTimer(time);
+};
+
+const updateQuestionText = (question) => {
   const questionText = document.querySelector(".question-text");
   questionText.innerHTML = `
     ${currQuestion} / ${questions.length} ${question.question}`;
+};
 
+const displayAnswers = (question) => {
   const answers = [
     ...question.incorrect_answers,
     question.correct_answer.toString(),
@@ -76,7 +86,14 @@ const displayQuestion = (question) => {
 
   answers.sort(() => Math.random() - 0.5);
   answers.forEach((answer) => {
-    answersContainer.innerHTML += `
+    answersContainer.innerHTML += createAnswerElement(answer);
+  });
+
+  addAnswerEventListeners();
+};
+
+const createAnswerElement = (answer) => {
+  return `
       <div class="answer">
       <span class="text">${answer}</span>
       <span class="checkbox">
@@ -84,24 +101,26 @@ const displayQuestion = (question) => {
       </span>
       </div>
       `;
-  });
+};
 
+const addAnswerEventListeners = () => {
   const answerWrap = document.querySelectorAll(".answer");
   answerWrap.forEach((answer) => {
     answer.addEventListener("click", () => {
-      if (!answer.classList.contains("checked")) {
-        answerWrap.forEach((answer) => {
-          answer.classList.remove("selected");
-        });
-
-        answer.classList.add("selected");
-        btnSubmit.disabled = false;
-      }
+      handleAnswerClick(answerWrap, answer);
     });
   });
+};
 
-  time = timeEl.value;
-  launchTimer(time);
+const handleAnswerClick = (answerWrap, answer) => {
+  if (!answer.classList.contains("checked")) {
+    answerWrap.forEach((answer) => {
+      answer.classList.remove("selected");
+    });
+
+    answer.classList.add("selected");
+    btnSubmit.disabled = false;
+  }
 };
 
 const launchTimer = (time) => {
@@ -112,21 +131,21 @@ const launchTimer = (time) => {
     } else {
       checkAnswer();
     }
-  }, 1000);
+  }, DISPLAY_DELAY);
 };
 
 const loading = () => {
-  startEl.innerHTML = ".";
+  startButton.textContent = ".";
   const loadingInterval = setInterval(() => {
-    if (startEl.length === "") {
-      startEl.innerHTML = ".";
+    if (startButton.textContent.length === "") {
+      startButton.textContent = ".";
     } else {
-      startEl.innerHTML += ".";
+      startButton.textContent += ".";
     }
-    if (startEl.innerHTML === "....") {
-      startEl.innerHTML = "";
+    if (startButton.textContent === "....") {
+      startButton.textContent = "";
     }
-  }, 500);
+  }, DISPLAY_DELAY);
 };
 
 const btnSubmit = document.querySelector(".submit");
@@ -197,16 +216,15 @@ const finalScore = document.querySelector(".final-score");
 
 const displayScore = () => {
   resultsDisplayEl.classList.remove("hide");
-  gameDisplayEl.classList.add("hide");
+  gameDisplay.classList.add("hide");
   finalScore.innerHTML = `You scored ${score} / ${questions.length}`;
 };
-
-finalScore.innerHTML = `You scored ${score} / ${questions.length}`;
 
 const btnRestart = document.querySelector(".restart");
 
 btnRestart.addEventListener("click", () => {
+  score = 0;
   window.location.reload();
 });
 
-startEl.addEventListener("click", triviaLaunch);
+startButton.addEventListener("click", triviaLaunch);
