@@ -137,7 +137,7 @@ const launchTimer = (time) => {
 const loading = () => {
   startButton.textContent = ".";
   const loadingInterval = setInterval(() => {
-    if (startButton.textContent.length === "") {
+    if (startButton.textContent.length === 0) {
       startButton.textContent = ".";
     } else {
       startButton.textContent += ".";
