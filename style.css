@@ -23,17 +23,18 @@ body {
 
 h1 {
   font-family: "Poller One", serif;
-  font-size: 5rem;
+  font-size: 8rem;
   background-image: linear-gradient(to right, #ab8f0f, #90ae22, #7bb631);
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   text-align: center;
   margin: 3rem auto 3rem auto;
+  text-transform: uppercase;
 }
 
 @media only screen and (max-width: 768px) {
   h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 }
 
